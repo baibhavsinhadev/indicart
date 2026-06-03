@@ -49,13 +49,7 @@ It supports user and admin roles, secure authentication, and multiple payment op
 
 * Node.js
 * Express.js
-
-### **Database**
-
 * MongoDB
-
-### **Authentication**
-
 * JWT with cookies
 
 ### **Payments**

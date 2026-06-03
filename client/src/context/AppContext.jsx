@@ -135,6 +135,21 @@ export const AppProvider = ({ children }) => {
         return Math.floor(totalAmount * 100) / 100;
     };
 
+    // Fetch Seller Orders
+    const fetchSellerOrders = async () => {
+        try {
+            const { data } = await api.get("/order/seller");
+            if (data.success) {
+                setSellerOrders(data.orders);
+            } else {
+                toast.error(data.message)
+            };
+        } catch (error) {
+            const message = error.response?.data?.message || "Something went wrong";
+            toast.error(message);
+        };
+    };
+
     // Fetch Orders
     const fetchOrders = async () => {
         setOrders(dummyOrders);
@@ -148,6 +163,12 @@ export const AppProvider = ({ children }) => {
         fetchSeller();
         fetchUser();
     }, []);
+
+    useEffect(() => {
+        if (isSeller) {
+            fetchSellerOrders();
+        }
+    }, [isSeller])
 
     useEffect(() => {
         const updateCart = async () => {

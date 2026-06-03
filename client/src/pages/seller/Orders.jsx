@@ -6,25 +6,7 @@ import { toast } from "react-toastify";
 
 const Orders = () => {
 
-    const { currency, sellerOrders, setSellerOrders } = useAppContext();
-
-    const fetchOrders = async () => {
-        try {
-            const { data } = await api.get("/order/seller");
-            if (data.success) {
-                setSellerOrders(data.orders);
-            } else {
-                toast.error(data.message)
-            };
-        } catch (error) {
-            const message = error.response?.data?.message || "Something went wrong";
-            toast.error(message);
-        };
-    };
-
-    useEffect(() => {
-        fetchOrders();
-    }, [])
+    const { currency, sellerOrders } = useAppContext();
 
     return (
         <div className="md:p-10 p-4 space-y-4">
