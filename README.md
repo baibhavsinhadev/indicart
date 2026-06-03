@@ -1,7 +1,5 @@
 # IndiCart
 
----
-
 **IndiCart** is a full-stack grocery delivery web application built to provide a seamless online shopping experience for users and efficient product and order management for sellers.
 
 It supports user and admin roles, secure authentication, and multiple payment options including Cash on Delivery (COD) and Stripe integration.
