@@ -1,4 +1,4 @@
-# Contributing to QuickEMS
+# Contributing to IndiCart
 
 Thanks for your interest in contributing to **IndiCart**. This project is built to solve real-world problems, and contributions that improve usability, performance, and scalability are always welcome.
 
