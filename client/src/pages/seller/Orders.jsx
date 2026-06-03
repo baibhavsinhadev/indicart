@@ -7,6 +7,30 @@ import { toast } from "react-toastify";
 const Orders = () => {
 
     const { currency, sellerOrders } = useAppContext();
+    const [orderStatus, setOrderStatus] = useState({});
+
+    const handleStatusChange = async (orderId, value) => {
+        try {
+            setOrderStatus((prev) => ({
+                ...prev,
+                [orderId]: value
+            }));
+
+            const { data } = await api.post("/order/update", { orderId, status: value });
+            if (data.success) {
+                toast.success(data.message);
+            } else {
+                toast.success(data.message);
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || error.message);
+
+            setOrderStatus((prev) => ({
+                ...prev,
+                [orderId]: sellerOrders.find(o => o._id === orderId)?.status || "Order Placed"
+            }));
+        }
+    };
 
     return (
         <div className="md:p-10 p-4 space-y-4">
@@ -43,7 +67,14 @@ const Orders = () => {
                         <p>Method: {order.paymentType}</p>
                         <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
                         <p>Payment: {order.isPaid ? "Paid" : "Pending"}</p>
+
+                        <select value={orderStatus[order._id] || order.status || "Order Placed"} onChange={(e) => handleStatusChange(order._id, e.target.value)} className="mt-2 border border-gray-300 px-2 py-1 text-black">
+                            <option>Order Placed</option>
+                            <option>Out For Delivery</option>
+                            <option>Delivered</option>
+                        </select>
                     </div>
+
                 </div>
             ))}
         </div>

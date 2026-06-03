@@ -258,3 +258,61 @@ export const getSellerOrders = async (req, res) => {
         });
     }
 };
+
+// Update Order Status : POST /api/order/update
+export const updateOrderStatus = async (req, res) => {
+    try {
+        const { orderId, status } = req.body;
+        const validStatuses = ["Order Placed", "Out For Delivery", "Delivered"];
+
+        // check valid status
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid status value"
+            });
+        }
+
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "Order not found"
+            });
+        }
+
+        const currentStatus = order.status || "Order Placed";
+
+        // Prevent backward movement
+        const statusFlow = {
+            "Order Placed": 1,
+            "Out For Delivery": 2,
+            "Delivered": 3
+        };
+
+        if (statusFlow[status] < statusFlow[currentStatus]) {
+            return res.status(400).json({
+                success: false,
+                message: `Cannot change status from ${currentStatus} to ${status}`
+            });
+        }
+
+        // Update
+        order.status = status;
+        await order.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Order status updated",
+            order
+        });
+
+    } catch (error) {
+        logger.error({ error }, "Update Order Status Error");
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to update order status",
+        });
+    }
+};
