@@ -23,7 +23,9 @@ const Cart = () => {
                 if (data.addresses.length > 0) {
                     setSelectedAddress(data.addresses[0])
                 }
-            };
+            } else {
+                toast.error(data.message);
+            }
         } catch (error) {
             const message = error.response?.data?.message || "Something went wrong";
             toast.error(message);
@@ -105,7 +107,9 @@ const Cart = () => {
     }, [products, cartItems]);
 
     useEffect(() => {
-        getUserAddress();
+        if (user) {
+            getUserAddress();
+        };
     }, [user])
 
     return products.length > 0 && cartItems ? (
